@@ -55,15 +55,15 @@ const textNodes = [{
       },
       options: [{
           text: 'Осмотреться',
-          nextText:
+          nextText: 3
         },
         {
           text: 'Зал',
-          nextText:
+          nextText: 12
         },
         {
           text: 'Туалет',
-          nextText:
+          nextText: 4
         }
       ]
     },
@@ -72,15 +72,21 @@ const textNodes = [{
       text: 'Вы все еще вор Владислав и стоите в прихожей своего дяди. В шабанах.',
       options: [{
           text: 'Осмотреться',
-          nextText:
+          nextText: 3
         },
         {
           text: 'Зал',
-          nextText:
+          nextText: 12
         },
         {
           text: 'Туалет',
-          nextText:
+          requiredState: (currentState) => currentState.checkWC == false,
+          nextText: 4
+        },
+        {
+          text: 'Туалет',
+          requiredState: (currentState) => currentState.checkWC == true,
+          nextText: 9
         }
       ]
     },
@@ -89,11 +95,17 @@ const textNodes = [{
       text: 'Перестань осматриваться, действуй.',
       options: [{
           text: 'Пойти в туалет',
-          nextText:
+          requiredState: (currentState) => currentState.checkWC == false,
+          nextText: 4
+        },
+        {
+          text: 'Пойти в туалет',
+          requiredState: (currentState) => currentState.checkWC == true,
+          nextText: 9
         },
         {
           text: 'Пойти в зал',
-          nextText:
+          nextText: 12
         }
       ]
     },
@@ -106,13 +118,21 @@ const textNodes = [{
             goldenKey: true,
             checkWC: true
           },
-          nextText:
+          nextText: 9
         },
         {
           text: 'Вернуться в прихожую',
           nextText: 2
         }
       ]
+    },
+    {
+      id: 9,
+      text: 'В туалете больше нет ничего ценного. Шорох из трубы кажется уже не таким подозрительным. ',
+      options: [{
+        text: 'Вернуться в прихожую',
+        nextText: 2
+      }]
     },
     {
       id: 5,
@@ -147,14 +167,6 @@ const textNodes = [{
       }]
     },
     {
-      id: 9,
-      text: 'Вы не взяли во внимание, что дядя живет на 6ом этаже. Вы разбились и умерли.',
-      options: [{
-        text: 'КОНЕЦ.',
-        nextText: -1
-      }]
-    },
-    {
       id: 10,
       text: 'Молодец. Вы застелили дядину постель.',
       setState: {
@@ -162,11 +174,11 @@ const textNodes = [{
       },
       options: [{
           text: 'Отойти от постели',
-          nextText: //zal tut nado
+          nextText: 12 //zal tut nado
         },
         {
           text: 'Расстелить обратно',
-          nextText: //rasstilka posteli
+          nextText: 15 //rasstilka posteli
         }
       ]
     }, {
@@ -178,26 +190,31 @@ const textNodes = [{
       },
       options: [{
           text: 'Отойти от постели',
-          nextText: //zal tut nado
+          nextText: 12 //zal tut nado
         },
         {
           text: 'Расстелить обратно',
-          nextText: //rasstilka posteli
+          nextText: 15 //rasstilka posteli
         }
-      }
-
-    ]
+      ]
+    }
   },
   {
     id: 12,
     text: 'Вы тихо зашли в зал. Окна завешаны. Постель не заправлена. Дяди нет.',
     options: [{
         text: 'Пойти на кухню',
-        nextText:
+        nextText: -1 //IZMENI
       },
       {
         text: 'Застелить постель',
-        nextText:
+        requiredState: (currentState) => currentState.makeBed === 0,
+        nextText: 11
+      },
+      {
+        text: 'Застелить постель',
+        requiredState: (currentState) => currentState.makeBed === 2,
+        nextText: 11
       },
       {
         text: 'Вернуться в прихожую',
@@ -209,11 +226,11 @@ const textNodes = [{
     text: 'У вас нет времени на раздумья, надо действовать.',
     options: [{
         text: 'Выпрыгнуть в окно',
-        nextText:
+        nextText: 8
       },
       {
         text: 'Бегом на кухню',
-        nextText:
+        nextText: -1 //IZMENI
       }
     ]
   }, {
@@ -224,7 +241,7 @@ const textNodes = [{
       nextText:
     }, {
       text: 'Расстелить постель',
-      nextText:
+      nextText: 15
     }, {
       text: 'Вернуться в прихожую',
       nextText: 2
@@ -234,14 +251,14 @@ const textNodes = [{
     text: 'Вы вернули постель в прежнее состояние. ',
     setState: {
       makeBed: 0
-    }
+    },
     options: [{
         text: 'Снова застелить постель',
-        nextText: //zastilka posteil fatal
+        nextText: 16 //zastilka posteil fatal
       },
       {
         text: 'Отойти от постели',
-        nextText: //zal
+        nextText: 12 //zal
       }
     ]
   }, {
@@ -249,11 +266,11 @@ const textNodes = [{
     text: 'Только вы подровнаяли уголки одеяла, как вдруг услышали шум из прихожей. ',
     options: [{
         text: 'Выпрыгнуть в окно',
-        nextText:
+        nextText: 8
       },
       {
         text: 'Бегом в прихожую',
-        nextText:
+        nextText: -1 //prowerka1 IZMENI
       }
     ]
   }, {
@@ -261,21 +278,21 @@ const textNodes = [{
     text: 'Теперь он вас точно заметил. Браво!',
     options: [{
         text: 'Убежать в зал',
-        nextText: //zal
+        nextText: 12 //zal
       },
       {
         text: 'Убежать в туалет',
-        nextText: //tupikowyi_tualet
+        nextText: 5 //tupikowyi_tualet
       },
       {
         text: 'Бросить в дядю ржавым ключом и убежать в тулет',
         requiredState: (currentState) => currentState.rustyKey,
-        nextText: //tupikowyi_tualet
+        nextText: 5 //tupikowyi_tualet
       },
       {
         text: 'Бросить в дядю золотым ключом и убежать в тулет ',
         requiredState: (currentState) => currentState.goldenKey,
-        nextText: //tupikowyi_tualet
+        nextText: 5 //tupikowyi_tualet
       }
     ]
   }
