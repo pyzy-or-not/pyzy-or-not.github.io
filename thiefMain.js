@@ -1,12 +1,12 @@
 // Edit your script here
 window.onload = onPageLoaded;
-var textElement =null;
-var optionButtonsElement =null;
-function onPageLoaded()
-{
- 	textElement = document.getElementById("text");
- 	optionButtonsElement = document.getElementById('option-buttons')
-startGame();
+var textElement = null;
+var optionButtonsElement = null;
+
+function onPageLoaded() {
+  textElement = document.getElementById("text");
+  optionButtonsElement = document.getElementById('option-buttons')
+  startGame();
 }
 let state = {}
 
@@ -21,7 +21,7 @@ function showTextNode(textNodeIndex) {
   if (textNode.setState != null) {
     state = Object.assign(state, textNode.setState)
   }
-console.log(textElement);
+  console.log(textElement);
   textElement.innerText = textNode.text
 
   while (optionButtonsElement.firstChild) {
