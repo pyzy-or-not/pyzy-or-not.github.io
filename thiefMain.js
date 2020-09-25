@@ -78,6 +78,7 @@ const textNodes = [{
   {
     id: 2,
     text: 'Вы все еще вор Владислав и стоите в прихожей своего дяди. В шабанах.',
+    setState: {checkWC: false},
     options: [{
         text: 'Осмотреться',
         nextText: 3
