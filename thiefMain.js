@@ -59,7 +59,9 @@ const textNodes = [{
     id: 1,
     text: 'Вы вор Владислав. Вы забрались в квартиру своего дяди в шабанах и стоите в прихожей.',
     setState: {
-      prihod: true
+      prihod: true,
+      checkWC: false,
+      makeBed: 0
     },
     options: [{
         text: 'Осмотреться',
@@ -78,7 +80,6 @@ const textNodes = [{
   {
     id: 2,
     text: 'Вы все еще вор Владислав и стоите в прихожей своего дяди. В шабанах.',
-    setState: {checkWC: false},
     options: [{
         text: 'Осмотреться',
         nextText: 3
@@ -123,17 +124,25 @@ const textNodes = [{
     text: 'Только вы приблизились к двери, как услышали за ней подозрительный шорох. Возможно это ваш дядя и если он вас увидит, то вам несдобровать.',
     options: [{
         text: 'Рискнуть и зайти в туалет',
-        setState: {
-          goldenKey: true,
-          checkWC: true
-        },
-        nextText: 9
+        nextText: 18
       },
       {
         text: 'Вернуться в прихожую',
         nextText: 2
       }
     ]
+  },
+  {
+    id: 18,
+    setState: {
+      goldenKey: true,
+      checkWC: true
+    },
+    text: 'Подозрительным шорохом оказалась течь в проржавевшей трубе. А еще вы нашли золотой ключ. ',
+    options: [{
+      text: 'Вернуться в прихожую',
+      nextText: 2
+    }]
   },
   {
     id: 9,
@@ -304,5 +313,5 @@ const textNodes = [{
         nextText: 5 //tupikowyi_tualet
       }
     ]
-  }
+  } //19 next
 ]
