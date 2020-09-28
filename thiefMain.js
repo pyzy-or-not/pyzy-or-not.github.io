@@ -6,6 +6,7 @@ var optionButtonsElement = null;
 function onPageLoaded() {
   textElement = document.getElementById("text");
   optionButtonsElement = document.getElementById('option-buttons')
+  imageElement = document.getElementById('image')
   startGame();
 }
 let state = {}
