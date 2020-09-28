@@ -30,6 +30,7 @@ function showTextNode(textNodeIndex) {
 
   textNode.options.forEach(option => {
     if (showOption(option)) {
+      state = Object.assign(state, option.setState)
       const button = document.createElement('button')
       button.innerText = option.text
       button.classList.add('btn')
@@ -52,7 +53,6 @@ function selectOption(option) {
   showTextNode(nextTextNodeId)
 }
 
-function changeState(textNode) {}
 
 
 const textNodes = [{
@@ -61,7 +61,12 @@ const textNodes = [{
     setState: {
       prihod: true,
       checkWC: false,
-      makeBed: 0
+      makeBed: 0,
+      uwidelDayadu: false,
+      goldenKey: false,
+      rustyKey: false,
+      isCheckedGoldenKey: false,
+      isCheckedRustyKey: false
     },
     options: [{
         text: 'Осмотреться',
@@ -86,7 +91,13 @@ const textNodes = [{
       },
       {
         text: 'Зал',
+        requiredState: (currentState) => currentState.makeBed == 0 || currentState.makeBed == 2,
         nextText: 12
+      },
+      {
+        text: 'Зал',
+        requiredState: (currentState) => currentState.makeBed == 1 || currentState.makeBed == 3,
+        nextText: 14
       },
       {
         text: 'Туалет',
@@ -188,7 +199,7 @@ const textNodes = [{
     id: 10,
     text: 'Молодец. Вы застелили дядину постель.',
     setState: {
-      makeBed: 1
+      makeBed: 3
     },
     options: [{
         text: 'Отойти от постели',
@@ -209,7 +220,7 @@ const textNodes = [{
     },
     options: [{
         text: 'Отойти от постели',
-        nextText: 12 //zal tut nado
+        nextText: 14 //zal tut nado
       },
       {
         text: 'Расстелить обратно',
@@ -222,17 +233,17 @@ const textNodes = [{
     text: 'Вы тихо зашли в зал. Окна завешаны. Постель не заправлена. Дяди нет.',
     options: [{
         text: 'Пойти на кухню',
-        nextText: -1 //IZMENI
+        nextText: 21
       },
       {
         text: 'Застелить постель',
-        requiredState: (currentState) => currentState.makeBed === 0,
+        requiredState: (currentState) => currentState.makeBed == 0,
         nextText: 11
       },
       {
         text: 'Застелить постель',
-        requiredState: (currentState) => currentState.makeBed === 2,
-        nextText: 11
+        requiredState: (currentState) => currentState.makeBed == 2,
+        nextText: 16
       },
       {
         text: 'Вернуться в прихожую',
@@ -248,7 +259,7 @@ const textNodes = [{
       },
       {
         text: 'Бегом на кухню',
-        nextText: -1 //IZMENI
+        nextText: 21
       }
     ]
   }, {
@@ -256,7 +267,7 @@ const textNodes = [{
     text: 'Вы тихо зашли в зал. Окна завешаны. Постель заправлена. Дяди нет.',
     options: [{
       text: 'Пойти на кухню',
-      nextText: -1 //IZMENI
+      nextText: 21
     }, {
       text: 'Расстелить постель',
       nextText: 15
@@ -268,10 +279,11 @@ const textNodes = [{
     id: 15,
     text: 'Вы вернули постель в прежнее состояние. ',
     setState: {
-      makeBed: 0
+      makeBed: 2
     },
     options: [{
         text: 'Снова застелить постель',
+        requiredState: (currentState) => currentState.makeBed == 2,
         nextText: 16 //zastilka posteil fatal
       },
       {
@@ -288,7 +300,7 @@ const textNodes = [{
       },
       {
         text: 'Бегом в прихожую',
-        nextText: -1 //prowerka1 IZMENI
+        nextText: 20 //prowerka1
       }
     ]
   }, {
@@ -296,7 +308,7 @@ const textNodes = [{
     text: 'Теперь он вас точно заметил. Браво!',
     options: [{
         text: 'Убежать в зал',
-        nextText: 12 //zal
+        nextText: 13 //zal
       },
       {
         text: 'Убежать в туалет',
@@ -304,14 +316,131 @@ const textNodes = [{
       },
       {
         text: 'Бросить в дядю ржавым ключом и убежать в тулет',
-        requiredState: (currentState) => currentState.rustyKey,
+        requiredState: (currentState) => currentState.rustyKey == true,
         nextText: 5 //tupikowyi_tualet
       },
       {
         text: 'Бросить в дядю золотым ключом и убежать в тулет ',
-        requiredState: (currentState) => currentState.goldenKey,
+        requiredState: (currentState) => currentState.goldenKey == true,
         nextText: 5 //tupikowyi_tualet
       }
     ]
-  } //19 next
+  }, {
+    id: 19,
+    text: 'Зал(дядей замечен)',
+    options: [{
+        text: 'Выпрыгнуть в окно',
+        nextText: 8
+      },
+      {
+        text: 'Пойти на кухню',
+        nextText: 21
+      }
+    ]
+
+  }, {
+    id: 20,
+    text: 'Оказавшись в прихожей вы увидели только что вернувшегося дядю.' + "\n" + ' Кажется он вас видит...',
+    setState: {
+      uwidelDayadu: true
+    },
+    options: [{
+        text: 'Убежать в зал',
+        nextText: 13 //zal
+      },
+      {
+        text: 'Убежать в туалет',
+        nextText: 5 //tupikowyi_tualet
+      },
+      {
+        text: 'Бросить в дядю ржавым ключом',
+        requiredState: (currentState) => currentState.rustyKey == true,
+        setState: {
+          rustyKey: false
+        },
+        nextText: 17 //tupikowyi_tualet
+      },
+      {
+        text: 'Бросить в дядю золотым ключом ',
+        requiredState: (currentState) => currentState.goldenKey == true,
+        nextText: 17 //tupikowyi_tualet
+      }
+    ]
+  }, {
+    id: 21, //KUCHNIA
+    text: 'Перед вами холодильник с замком.',
+    options: [{
+        text: 'Попробовать открыть золотым ключом',
+        requiredState: (currentState) => currentState.goldenKey == true && currentState.uwidelDayadu == false,
+        setState: {
+          isCheckedGoldenKey: true
+        },
+        nextText: 22
+      },
+      {
+        text: 'Попробовать открыть ржавым  ключом',
+        requiredState: (currentState) => currentState.rustyKey == true,
+        setState: {
+          isCheckedRustyKey: true
+        },
+        nextText: 24
+      }, {
+        text: 'Попробовать открыть',
+        requiredState: (currentState) => currentState.goldenKey == false && currentState.rustyKey == false && !currentState.uwidelDayadu,
+        nextText: 22
+      }, {
+        text: 'Вернуться в зал',
+        requiredState: (currentState) => currentState.uwidelDayadu == false && (currentState.makeBed == 0 || currentState.makeBed == 2),
+        nextText: 12
+      },
+      {
+        text: 'Вернуться в зал',
+        requiredState: (currentState) => currentState.uwidelDayadu == false && (currentState.makeBed == 1 || currentState.makeBed == 3),
+        nextText: 14
+      }, {
+        text: 'Попробовать открыть золотым ключом',
+        requiredState: (currentState) => currentState.goldenKey == true && currentState.uwidelDayadu == true,
+        setState: {
+          isCheckedGoldenKey: true
+        },
+        nextText: 23
+      }, {
+        text: 'Попробовать открыть',
+        requiredState: (currentState) => currentState.goldenKey == false && currentState.rustyKey == false && currentState.uwidelDayadu,
+        nextText: 23
+      },
+    ]
+  }, {
+    id: 22,
+    text: ' Заперто.',
+    options: [{
+      text: 'Отойти от холодильника',
+      nextText: 21
+    }]
+  }, {
+    id: 23,
+    text: 'Заперто. Времени больше не осталось. Вы в тупике. ',
+    options: [{
+      text: 'Вспомнить лучшие моменты жизни',
+      nextText: 7
+    }]
+  }, {
+    id: 24,
+    text: ' Пызы.'
+  }, {
+    id: 25,
+    text: 'Молодец. Вы застелили дядину постель.',
+    setState: {
+      makeBed: 3
+    },
+    options: [{
+        text: 'Отойти от постели',
+        nextText: 14 //zal tut nado
+      },
+      {
+        text: 'Расстелить обратно',
+        nextText: 15 //rasstilka posteli
+      }
+    ]
+  } //25 next
 ]
