@@ -13,12 +13,23 @@ let state = {}
 
 function startGame() {
   state = {}
+  showTextNode(0)
+}
+
+function restartGame() {
+  state = {}
   showTextNode(1)
 }
 
-function showTextNode(textNodeIndex) {
-  const textNode = textNodes.find(textNode => textNode.id === textNodeIndex)
+function changeImage(imageIndex) {
 
+  imageElement.src = "img/sr/" + imageIndex + ".jpg "
+}
+
+function showTextNode(textNodeIndex) {
+
+  const textNode = textNodes.find(textNode => textNode.id === textNodeIndex)
+  changeImage(textNode.idImage)
   if (textNode.setState != null) {
     state = Object.assign(state, textNode.setState)
   }
@@ -31,11 +42,10 @@ function showTextNode(textNodeIndex) {
 
   textNode.options.forEach(option => {
     if (showOption(option)) {
-      state = Object.assign(state, option.setState)
       const button = document.createElement('button')
       button.innerText = option.text
       button.classList.add('btn')
-      button.addEventListener('click', () => selectOption(option))
+      button.addEventListener('click', () => Object.assign(state, option.setState) && selectOption(option))
       optionButtonsElement.appendChild(button)
     }
   })
@@ -48,7 +58,7 @@ function showOption(option) {
 function selectOption(option) {
   const nextTextNodeId = option.nextText
   if (nextTextNodeId <= 0) {
-    return startGame()
+    return restartGame()
   }
   state = Object.assign(state, option.setState)
   showTextNode(nextTextNodeId)
@@ -57,7 +67,35 @@ function selectOption(option) {
 
 
 const textNodes = [{
+    id: 0,
+    idImage: 0,
+    text: 'Порт игры века от Павла ака Kennys Killer.' + "\n\n" + ' Авторские права не принадлежат никому, орфография и логика игры сохранена от создателя. ' + "\n\n" + 'Посвящается жителям комнаты 109 Т-2',
+    setState: {
+      prihod: true,
+      checkWC: false,
+      makeBed: 0,
+      uwidelDayadu: false,
+      goldenKey: false,
+      rustyKey: false,
+      isCheckedGoldenKey: false,
+      isCheckedRustyKey: false
+    },
+    options: [{
+        text: 'Осмотреться',
+        nextText: 3
+      },
+      {
+        text: 'Зал',
+        nextText: 12
+      },
+      {
+        text: 'Туалет',
+        nextText: 4
+      }
+    ]
+  }, {
     id: 1,
+    idImage: 7,
     text: 'Вы вор Владислав. Вы забрались в квартиру своего дяди в шабанах и стоите в прихожей.',
     setState: {
       prihod: true,
@@ -85,6 +123,7 @@ const textNodes = [{
   },
   {
     id: 2,
+    idImage: 7,
     text: 'Вы все еще вор Владислав и стоите в прихожей своего дяди. В шабанах.',
     options: [{
         text: 'Осмотреться',
@@ -114,6 +153,7 @@ const textNodes = [{
   },
   {
     id: 3,
+    idImage: 2,
     text: 'Перестань осматриваться, действуй.',
     options: [{
         text: 'Пойти в туалет',
@@ -133,6 +173,7 @@ const textNodes = [{
   },
   {
     id: 4,
+    idImage: 9,
     text: 'Только вы приблизились к двери, как услышали за ней подозрительный шорох. Возможно это ваш дядя и если он вас увидит, то вам несдобровать.',
     options: [{
         text: 'Рискнуть и зайти в туалет',
@@ -146,6 +187,7 @@ const textNodes = [{
   },
   {
     id: 18,
+    idImage: 8,
     setState: {
       goldenKey: true,
       checkWC: true
@@ -158,6 +200,7 @@ const textNodes = [{
   },
   {
     id: 9,
+    idImage: 12,
     text: 'В туалете больше нет ничего ценного. Шорох из трубы кажется уже не таким подозрительным. ',
     options: [{
       text: 'Вернуться в прихожую',
@@ -166,6 +209,7 @@ const textNodes = [{
   },
   {
     id: 5,
+    idImage: 14,
     text: 'Дядя медленно зашел в туалет. Медленно закрыл дверь. Медленно достал дробовик. И быстро распределил ваши внутренности по кафельной плитке.',
     options: [{
       text: 'КОНЕЦ.',
@@ -174,6 +218,7 @@ const textNodes = [{
   },
   {
     id: 6,
+    idImage: 15,
     text: 'Вы в тупике. Вы гений.',
     options: [{
       text: 'Вспомнить лучшие моменты жизни',
@@ -182,6 +227,7 @@ const textNodes = [{
   },
   {
     id: 7,
+    idImage: 16,
     text: 'Дядя медленно зашел на кухню. Медленно закрыл дверь. Медленно достал дробовик. И быстро распределил ваши внутренности по дверце холодильника.',
     options: [{
       text: 'КОНЕЦ.',
@@ -190,6 +236,7 @@ const textNodes = [{
   },
   {
     id: 8,
+    idImage: 3,
     text: 'Вы не взяли во внимание, что дядя живет на 6ом этаже. Вы разбились и умерли.',
     options: [{
       text: 'КОНЕЦ.',
@@ -198,6 +245,7 @@ const textNodes = [{
   },
   {
     id: 10,
+    idImage: 1,
     text: 'Молодец. Вы застелили дядину постель.',
     setState: {
       makeBed: 3
@@ -214,6 +262,7 @@ const textNodes = [{
   },
   {
     id: 11,
+    idImage: 17,
     text: 'Молодец. Вы застелили дядину постель. А на полу нашли ржавый ключ.',
     setState: {
       rustyKey: true,
@@ -231,6 +280,7 @@ const textNodes = [{
   },
   {
     id: 12,
+    idImage: 4,
     text: 'Вы тихо зашли в зал. Окна завешаны. Постель не заправлена. Дяди нет.',
     options: [{
         text: 'Пойти на кухню',
@@ -253,6 +303,7 @@ const textNodes = [{
     ]
   }, {
     id: 13,
+    idImage: 10,
     text: 'У вас нет времени на раздумья, надо действовать.',
     options: [{
         text: 'Выпрыгнуть в окно',
@@ -265,6 +316,7 @@ const textNodes = [{
     ]
   }, {
     id: 14,
+    idImage: 1,
     text: 'Вы тихо зашли в зал. Окна завешаны. Постель заправлена. Дяди нет.',
     options: [{
       text: 'Пойти на кухню',
@@ -278,6 +330,7 @@ const textNodes = [{
     }]
   }, {
     id: 15,
+    idImage: 4,
     text: 'Вы вернули постель в прежнее состояние. ',
     setState: {
       makeBed: 2
@@ -294,6 +347,7 @@ const textNodes = [{
     ]
   }, {
     id: 16,
+    idImage: 18,
     text: 'Только вы подровнаяли уголки одеяла, как вдруг услышали шум из прихожей. ',
     options: [{
         text: 'Выпрыгнуть в окно',
@@ -306,6 +360,7 @@ const textNodes = [{
     ]
   }, {
     id: 17,
+    idImage: 19,
     text: 'Теперь он вас точно заметил. Браво!',
     options: [{
         text: 'Убежать в зал',
@@ -317,17 +372,18 @@ const textNodes = [{
       },
       {
         text: 'Бросить в дядю ржавым ключом и убежать в тулет',
-        requiredState: (currentState) => currentState.rustyKey == true,
+        requiredState: (currentState) => currentState.rustyKey == true && !currentState.isCheckedRustyKey,
         nextText: 5 //tupikowyi_tualet
       },
       {
         text: 'Бросить в дядю золотым ключом и убежать в тулет ',
-        requiredState: (currentState) => currentState.goldenKey == true,
+        requiredState: (currentState) => currentState.goldenKey == true && !currentState.isCheckedGoldenKey,
         nextText: 5 //tupikowyi_tualet
       }
     ]
   }, {
     id: 19,
+    idImage: 1,
     text: 'Зал(дядей замечен)',
     options: [{
         text: 'Выпрыгнуть в окно',
@@ -341,6 +397,7 @@ const textNodes = [{
 
   }, {
     id: 20,
+    idImage: 5,
     text: 'Оказавшись в прихожей вы увидели только что вернувшегося дядю.' + "\n" + ' Кажется он вас видит...',
     setState: {
       uwidelDayadu: true
@@ -364,11 +421,15 @@ const textNodes = [{
       {
         text: 'Бросить в дядю золотым ключом ',
         requiredState: (currentState) => currentState.goldenKey == true,
+        setState: {
+          goldenKey: false
+        },
         nextText: 17 //tupikowyi_tualet
       }
     ]
   }, {
     id: 21, //KUCHNIA
+    idImage: 20,
     text: 'Перед вами холодильник с замком.',
     options: [{
         text: 'Попробовать открыть золотым ключом',
@@ -413,6 +474,7 @@ const textNodes = [{
     ]
   }, {
     id: 22,
+    idImage: 21,
     text: ' Заперто.',
     options: [{
       text: 'Отойти от холодильника',
@@ -420,6 +482,7 @@ const textNodes = [{
     }]
   }, {
     id: 23,
+    idImage: 13,
     text: 'Заперто. Времени больше не осталось. Вы в тупике. ',
     options: [{
       text: 'Вспомнить лучшие моменты жизни',
@@ -427,9 +490,11 @@ const textNodes = [{
     }]
   }, {
     id: 24,
+    idImage: 11,
     text: ' Пызы.'
   }, {
     id: 25,
+    idImage: 1,
     text: 'Молодец. Вы застелили дядину постель.',
     setState: {
       makeBed: 3
