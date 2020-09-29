@@ -70,29 +70,10 @@ const textNodes = [{
     id: 0,
     idImage: 0,
     text: 'Порт игры века от Павла ака Kennys Killer.' + "\n\n" + ' Авторские права не принадлежат никому, орфография и логика игры сохранена от создателя. ' + "\n\n" + 'Посвящается жителям комнаты 109 Т-2',
-    setState: {
-      prihod: true,
-      checkWC: false,
-      makeBed: 0,
-      uwidelDayadu: false,
-      goldenKey: false,
-      rustyKey: false,
-      isCheckedGoldenKey: false,
-      isCheckedRustyKey: false
-    },
     options: [{
-        text: 'Осмотреться',
-        nextText: 3
-      },
-      {
-        text: 'Зал',
-        nextText: 12
-      },
-      {
-        text: 'Туалет',
-        nextText: 4
-      }
-    ]
+      text: 'ТАДЕУШ ЛОВИ БОМБУ',
+      nextText: 1
+    }]
   }, {
     id: 1,
     idImage: 7,
