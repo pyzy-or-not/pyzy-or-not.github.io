@@ -148,7 +148,12 @@ const textNodes = [{
       },
       {
         text: 'Пойти в зал',
+        requiredState: (currentState) => currentState.makeBed == 0 || currentState.makeBed == 2,
         nextText: 12
+      }, {
+        text: 'Пойти в зал',
+        requiredState: (currentState) => currentState.makeBed == 1 || currentState.makeBed == 3,
+        nextText: 14
       }
     ]
   },
